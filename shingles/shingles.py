@@ -4,6 +4,16 @@ from nltk import ngrams
 from shingles.util import generate_random_seeds, minhash_similarity
 
 
+def text_similarity(this_text, other_text, shingle_length=5, minhash_size=200, random_seed=5):
+    """
+    calculate similarity of text text using shingle similarity
+    shingle similarity is defined as similarity of minhash obtained by hashing n-grams of length n=shingle_length 
+    """
+    this_shingles = ShingledText(this_text, random_seed=random_seed, shingle_length=shingle_length, minhash_size=minhash_size)
+    other_shingles = ShingledText(other_text, random_seed=random_seed, shingle_length=shingle_length, minhash_size=minhash_size)
+    return this_shingles.similarity(other_shingles)
+
+
 class ShingledText:
     def __init__(self, text, random_seed=5, shingle_length=5, minhash_size=200):
         split_text = text.split()
@@ -22,3 +32,4 @@ class ShingledText:
 
     def similarity(self, other_shingled_text):
         return minhash_similarity(self.minhash, other_shingled_text.minhash)
+
